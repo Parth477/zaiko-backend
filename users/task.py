@@ -4,6 +4,10 @@ from django.core.mail import EmailMultiAlternatives
 
 from django.template.loader import render_to_string
 
+# Start celery worker
+# celery -A zaiko worker --loglevel=debug
+# Start Flower
+# celery -A zaiko flower --loglevel=debug --inspect_timeout=20000 --broker=amqp://parth:parth@localhost:5672//
 
 @task(name='zaiko.send_verification_email')
 def send_email_task(client_email,key):
