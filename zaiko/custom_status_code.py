@@ -64,3 +64,8 @@ EMAIL_VERIFIED_SUCCESSFULLY = {
     KEY_SUCCESS_CODE: 300,
     KEY_MESSAGE: "Email verified successfully."
 }
+
+USER_ROLE_LIST_SENT = {
+    KEY_SUCCESS_CODE: 200,
+    KEY_MESSAGE: 'User role sent successfully'
+}

@@ -8,35 +8,42 @@ from rest_framework.response import Response
 from zaiko import responses
 from rest_framework import status
 from zaiko import custom_status_code
+from zaiko.permissions import IsAuthenticated
 
 class PostCustomerRegistration(APIView):
     """
        User registration
        #sample data
        {
-           "first_name": "Darshit",
+           "first_name": "Parth",
            "last_name": "Ghinaiya",
-           "email": "parth13@yopmail.com",
+           "email": "parth@yopmail.com",
            "contact_no": "9974179352",
            "address": "Ahemdabad",
            "organization": "GPS tech",
-           "password":"parth"
+           "password":"parth",
+           "user_role": 2
 
-       }
+        }
 
        # Success response
        {
-           "success": true,
-           "message": "User registration successful",
-           "payload": {
-               "first_name": "Darshit",
-               "last_name": "Ghinaiya",
-               "email": "parth13@yopmail.com",
-               "contact_no": "9974179352",
-               "address": "Ahemdabad",
-               "organization": "GPS tech"
-           }
-       }
+            "success": true,
+            "message": "User registration successful",
+            "payload": {
+                "id": 2,
+                "last_login": null,
+                "first_name": "Parth",
+                "last_name": "Ghinaiya",
+                "email": "parth@yopmail.com",
+                "is_email_verified": false,
+                "organization": "GPS tech",
+                "contact_no": "9974179352",
+                "address": "Ahemdabad",
+                "created": "2020-03-10T06:32:18.426026Z",
+                "user_role": 2
+            }
+        }
        """
 
     def post(self, request):
@@ -50,6 +57,7 @@ class PostCustomerRegistration(APIView):
             user.first_name = request.data['first_name']
             user.set_password(request.data['password'])
             user.last_name = request.data['last_name']
+            user.user_role_id = request.data['user_role']
             user.contact_no = request.data['contact_no']
             user.address = request.data['address']
             user.organization = request.data['organization']
@@ -96,7 +104,7 @@ class UserLogin(APIView):
     """
     # Sample data
     {
-        "email": "sunny@yopmail.com",
+        "email": "parth@yopmail.com",
         "password":"parth"
     }
 
@@ -106,18 +114,19 @@ class UserLogin(APIView):
         "message": "Login Successfull",
         "payload": {
             "user": {
-                "id": 4,
+                "id": 2,
                 "last_login": null,
-                "first_name": "Sunny",
-                "last_name": "Kalola",
-                "email": "sunny@yopmail.com",
+                "first_name": "Parth",
+                "last_name": "Ghinaiya",
+                "email": "parth@yopmail.com",
                 "is_email_verified": true,
                 "organization": "GPS tech",
                 "contact_no": "9974179352",
                 "address": "Ahemdabad",
-                "created": "2020-02-26T17:38:42.050353Z"
+                "created": "2020-03-10T06:32:18.426026Z",
+                "user_role": 2
             },
-            "token": "45e3cddf67c27c60a77a8fdea86411cdb27a2643"
+            "token": "03d6bde4a8cf30b5a032b04e4c53a973f119ce9c"
         }
     }
     """
@@ -160,154 +169,30 @@ class UserLogin(APIView):
 
 
 
+class UserRoleAPI(APIView):
+    permission_classes = (IsAuthenticated,)
 
+    def get(self, request):
+        """
+            # User Roles Get APi
 
+            #  Response
 
+                {
+                    "success": true,
+                    "message": " User role sent successfully",
+                    "payload": { },
+                    }
+                }
+        """
+        # get the list of roles
+        roles = UserRole.objects.all().order_by('id')
 
+        serializer = UserRoleSerializer(roles, many=True)
 
-
-#
-# # Get Customer list
-# class GetCutomer(APIView):
-#
-#     def get(self, request):
-#         """
-#             Get Customer list
-#
-#             ### IF DATA EXIST IN DATABASE
-#
-#             {
-#                 "success": true,
-#                 "message": "Data found successfully",
-#                 "payload": [
-#                     {
-#                         "id": 1,
-#                         "first_name": "Parth",
-#                         "last_name": "Ghinaiya",
-#                         "email": "sparth@yopmail.com",
-#                         "avatar_url": "http://a.com",
-#                         "phone_no": "9974179352",
-#                         "organization": "Own Business",
-#                         "address": "Ahemdabad",
-#                         "created": "2019-03-26T11:46:01.836491Z",
-#                         "modified": "2019-03-26T11:46:01.836511Z",
-#                         "role": 1
-#                     }
-#                 ]
-#             }
-#
-#         ### IF DATA NOT EXISTS
-#
-#              {
-#                 "success": false,
-#                 "message": "Data does not exists",
-#                 "payload": {},
-#                 "error_code": 204
-#             }
-#
-#         """
-#         users = Users.objects.all().order_by('-modified')
-#         if users.exists() :
-#             serializer = CustomerDetailsSerializer(users, many = True)
-#             return Response(responses.generate_success_response(custom_status_code.DATA_FOUND_SUCCESSFUL,
-#                                                                 payload=serializer.data),status=status.HTTP_200_OK)
-#
-#         else:
-#             return Response(responses.generate_failure_response(custom_status_code.DATA_DOES_NOT_EXISTS, payload={}),status=status.HTTP_204_NO_CONTENT)
-#
-#
-# #Login Details
-# class PostLogin(APIView):
-#
-#     def post(self, request):
-#         """
-#             Store login time and date as well as authenticate user
-#
-#         ### Request data
-#              {
-#                 "email":string (required),
-#                 "password":string (required),
-#              }
-#
-#         ### Sample Sample request data
-#             {
-#                 "email":"parth@yopmail.com",
-#                 "password":"parth123"
-#             }
-#
-#         ### Error Responses
-#
-#         ### Invalid data
-#             {
-#                 "success": false,
-#                 "message": "Bad Request",
-#                 "payload": {
-#                     "email": [
-#                             "Enter a valid email address."
-#                         ]
-#                     },
-#                     "error_code": 400
-#                 }
-#                 "error_code": 400
-#             }
-#             HTTP status code 400:- Bad Request
-#             {
-#                 "success": false,
-#                 "message": "This email id does not exists",
-#                 "payload": {},
-#                 "error_code": 400
-#             }
-#
-#              {
-#                 "success": false,
-#                 "message": "Password does not match with this email id",
-#                 "payload": {},
-#                 "error_code": 400
-#             }
-#
-#             {
-#                 "success": false,
-#                 "message": "User with this email id already exists",
-#                 "payload": {},
-#                 "error_code": 400
-#             }
-#         ### Success responses
-#             {
-#                 "success": true,
-#                 "message": "Data found successfully",
-#                 "payload": {
-#                     "Token": "9a799258e90c570b3eb23b61f31d06d4b60e4de4"
-#                 }
-#             }
-#
-#         """
-#         serializer = LoginSerializer(data=request.data)
-#
-#         if serializer.is_valid():
-#             try :
-#                 user = Users.objects.get(email=request.data['email'])
-#                 user_pass = UserLogin.objects.get(user_id=user.pk)
-#                 token = Token.objects.get(user=user)
-#
-#                 if user_pass.check_password(request.data['password']):
-#                     return Response(responses.generate_success_response
-#                                     (custom_status_code.DATA_FOUND_SUCCESSFUL
-#                                      ,payload={"Token":token.key},),status=status.HTTP_200_OK)
-#                 return Response(responses.generate_failure_response
-#                                 (custom_status_code.PASSWORD_WRONG_WITH_THIS_EMAIL_ID,
-#                                  payload={})
-#                                 ,status=status.HTTP_400_BAD_REQUEST)
-#
-#             except Users.DoesNotExist:
-#                 return Response(
-#                     responses.generate_failure_response
-#                     (custom_status_code.EMAIL_ID_NOT_MATCH,
-#                      payload={}),
-#                     status=status.HTTP_400_BAD_REQUEST
-#                 )
-#         else :
-#             return Response(responses.generate_failure_response
-#                             (custom_status_code.BAD_REQUEST,
-#                              serializer.errors),status=status.HTTP_400_BAD_REQUEST)
-#
-#
+        return Response(
+            responses.generate_success_response(
+                custom_status_code.USER_ROLE_LIST_SENT,
+                payload=serializer.data),
+            status=status.HTTP_200_OK)
+    

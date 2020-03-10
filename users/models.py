@@ -37,6 +37,8 @@ class Users(AbstractBaseUser):
 
     # password = models.CharField(max_length=128)
 
+    user_role = models.ForeignKey(UserRole, on_delete=models.CASCADE, default=1)  # Define user role from the system
+
     organization = models.CharField(max_length=120)
 
     contact_no = models.CharField(max_length=10)

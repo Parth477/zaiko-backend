@@ -24,12 +24,18 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=128, allow_blank=False, allow_null=False)
 
 
+class UserRoleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserRole
+        fields = '__all__'
+
 class RegistrationSerializer(serializers.ModelSerializer):
     # password = PasswordSerializer()
 
     class Meta:
         model = Users
-        fields = ('first_name', 'last_name', 'email', 'contact_no', 'address', 'password', 'organization')
+        fields = ('first_name', 'last_name', 'email', 'contact_no', 'address', 'password', 'organization','user_role')
 
     def create(self, validated_data):
         # kwargs = {}
@@ -46,20 +52,4 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def update(self,instace, validated_data):
         pass
 
-# class LoginSerializer(serializers.Serializer):
-#     def create(self, validated_data):
-#         pass
-#
-#     def update(self, instance, validated_data):
-#         pass
-#
-#     email = serializers.EmailField(required=True)
-#     password = serializers.CharField(required=True)
-#
-# class CustomerDetailsSerializer(serializers.ModelSerializer):
-#     """
-#         Fetch multiple Users
-#     """
-#     class Meta :
-#         model = Users
-#         fields = '__all__'
+
