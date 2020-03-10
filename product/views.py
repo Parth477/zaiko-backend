@@ -33,8 +33,8 @@ class CategoryGetAndPostView(APIView):
                 "payload": {
                     "id": 1,
                     "category_name": "Electronic",
-                    "created_at": "2019-03-26T09:17:05.657045Z",
-                    "modified_at": "2019-03-26T09:17:05.657131Z"
+                    "created_at": "2020-03-10T07:03:51.359834Z",
+                    "modified_at": "2020-03-10T07:03:51.359866Z"
                 }
             }
         """

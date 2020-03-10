@@ -18,5 +18,8 @@ from django.urls import re_path,include
 
 urlpatterns = [
     re_path('admin/', admin.site.urls),
-    re_path('api/v1/customer/',include('users.urls')),
+    re_path('api/v1/',include('users.urls')),
+    re_path('api/v1/', include('supplier.urls')),
+    re_path('api/v1/', include('product.urls')),
+    re_path('api/v1/', include('orders.urls')),
 ]

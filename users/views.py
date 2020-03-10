@@ -1,8 +1,5 @@
-# from django.shortcuts import render
 from rest_framework.views import APIView
 from .serializer import *
-import coreapi
-from rest_framework.schemas import AutoSchema
 from .task import send_email_task
 from rest_framework.response import Response
 from zaiko import responses
@@ -195,4 +192,3 @@ class UserRoleAPI(APIView):
                 custom_status_code.USER_ROLE_LIST_SENT,
                 payload=serializer.data),
             status=status.HTTP_200_OK)
-    

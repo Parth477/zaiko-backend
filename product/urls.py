@@ -1,10 +1,9 @@
-from django.urls import path
+from django.urls import re_path
 from . import views
 
 urlpatterns = [
 
-    path('categories', views.CategoryGetAndPostView.as_view()),
-
-    path('products', views.ProductGetAndPostView.as_view()),
+    re_path('categories', views.CategoryGetAndPostView.as_view()),
+    re_path('products/', views.ProductGetAndPostView.as_view()),
 
 ]
