@@ -24,7 +24,7 @@ class Product(models.Model):
 
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='items')
 
     unit_in_stock = models.IntegerField()
 

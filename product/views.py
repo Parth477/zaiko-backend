@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from .serializers import CategorySerializer, ProductSerializer
+from .serializers import CategorySerializer, ProductSerializer, ProductDetailSerializer
 from .models import Category, Product
 from rest_framework.response import Response
 from rest_framework import status
@@ -207,7 +207,7 @@ class ProductGetAndPostView(APIView):
 
         if product.exists():
 
-            serializer = ProductSerializer(product, many=True)
+            serializer = ProductDetailSerializer(product, many=True)
             return Response(generate_success_response(DATA_FOUND_SUCCESSFUL, payload=serializer.data),
                             status=status.HTTP_200_OK)
 
