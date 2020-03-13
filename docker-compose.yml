@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  web:
+    container_name: zaiko_django_container
+    restart: always
+    build: .
+    entrypoint: ./docker_entrypoint_local.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+    - rabbitmq
+
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+    - RABBITMQ_DEFAULT_USER=parth
+    - RABBITMQ_DEFAULT_PASS=parth
+    volumes:
+      - ./rabbitmq-data:/var/lib/rabbitmq/mnesia/parth@parth
+    ports:
+    - "5672:5672"
+    - "15672:15672"
+
+  flower:
+    build: .
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+    command: flower --basic_auth=${FLOWER_USR}:${FLOWER_PWD} -A zaiko --port=5555
+    depends_on:
+      - rabbitmq
+    ports:
+      - "5555:5555"
+
