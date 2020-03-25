@@ -64,9 +64,9 @@ class GetPostOrder(APIView):
         orders = Orders.objects.all()
         if orders.exists():
             orders_details = OrdersSerializer(orders, many=True)
-            payload = {'Order Data:': orders_details.data}
+            # payload = {'Order_Data:': orders_details.data}
             return Response(responses.generate_success_response
-                            (custom_status_code.DATA_FOUND_SUCCESSFUL, payload=payload),
+                            (custom_status_code.DATA_FOUND_SUCCESSFUL, payload=orders_details.data),
                             status=status.HTTP_200_OK)
         return Response(responses.generate_failure_response
             (custom_status_code.DATA_DOES_NOT_EXISTS, payload={}),
